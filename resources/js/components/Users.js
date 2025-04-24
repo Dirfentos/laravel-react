@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import{useState, useEffect} from 'react';
 import { line } from 'laravel-mix/src/Log';
 import {Link} from 'react-router-dom';
+import { config } from '../config';
+
 
 function Users(){
     const [users, setUsers] = useState([])
