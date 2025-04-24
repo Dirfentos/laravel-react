@@ -35,5 +35,30 @@ class ImportPlaceholderUsers extends Command
         } else {
             $this->error('Failed to fetch users.');
         }
-    }
+
+        $dummyResponse = Http::get('https://dummyjson.com/users');
+
+        if ($dummyResponse->successful()) {
+            $dummyUsers = $dummyResponse->json()['users'];
+        
+            foreach ($dummyUsers as $user) {
+                PlaceholderUser::updateOrCreate(
+                    ['email' => $user['email']],
+                    [
+                        'username'    => $user['username'],
+                        'email'       => $user['email'],
+                        'phone'       => $user['phone'] ?? null,
+                        'website'     => null, 
+                        'first_name'  => $user['firstName'],
+                        'last_name'   => $user['lastName'],
+                        'name'        => $user['firstName'] . ' ' . $user['lastName'],
+                        'maiden_name' => $user['maidenName'] ?? null,
+                        'age'         => $user['age'] ?? null,
+                        'gender'      => $user['gender'] ?? null,
+                        'birth_date'  => $user['birthDate'] ?? null,
+                    ]
+                );
+            }
+            }
+        }
 }

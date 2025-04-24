@@ -33,5 +33,9 @@ Route::get('/users/{id}', function ($id) {
 });
 
 Route::post('/users/{id}', function ($id, Request $request) {
-    return 'ok';
+   $request ->validate([
+        'name' => 'required|min:4|max:60',
+        'email' => 'required|email|unique:users,email,'.$id,
+        'password' => 'nullable|min:4|max:20|confirmed',
+    ]);
 });
