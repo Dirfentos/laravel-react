@@ -16,13 +16,13 @@ use App\Models\PlaceholderUser;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::get('/users', [PlaceholderUserController::class, 'index']);
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-Route::get('/users', [PlaceholderUserController::class, 'index']);
 
 Route::get('/users', function(){
     return PlaceholderUser::get();

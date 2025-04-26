@@ -1,74 +1,69 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import{useState, useEffect} from 'react';
-import { line } from 'laravel-mix/src/Log';
-import {Link} from 'react-router-dom';
-import { config } from '../config';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
+function Users() {
+  const [users, setUsers] = useState([]);
+  const [url, setUrl] = useState("http://127.0.0.1:8000/api/users");
 
-function Users(){
-    const [users, setUsers] = useState([])
-    const [links, setLinks] = useState([])
-    const [url, setUrl] = useState(config.users_url)
+  useEffect(() => {
+    fetch(url)
+      .then(res => {
+        if (!res.ok) {
+          throw new Error("Hiba a szervertől: " + res.status);
+        }
+        return res.json();
+      })
+      .then(data => {
+        setUsers(data);  // közvetlenül a tömbre állítunk
+      })
+      .catch(err => {
+        console.error("Fetch hiba:", err.message);
+      });
+  }, [url]);
 
-     useEffect(()=>{
-        fetch( url )
-            .then(res=>res.json())
-            .then( list=>{
-                setUsers(list.data);
-                setLinks(list.links)
-            }
-                
-            )
-    }, [url])
+  return (
+    <div className="container mt-4">
+      <div className="card">
+        <div className="card-header">Felhasználók</div>
+        <p className="text-center">{url}</p>
 
-    return (
-        <div className="container">
-            <div className="row justify-content-center">
-                <div className="col-md-8">
-                    <div className="card">
-                        <div className="card-header">Felhasználók</div>
-                            <p className="text-center">{url}</p>
-                        <div className="card-body">
-                            <table className="table table-striped">
-                            <tbody>
-                            {users !==  null ? users.map((item, index) => <tr key={index}>
+        <div className="card-body">
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Név</th>
+                <th>Email</th>
+                <th>Műveletek</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.length > 0 ? (
+                users.map((item, index) => (
+                  <tr key={index}>
+                    <td>{item.id}</td>
+                    <td><Link to={`/users/${item.id}`}>{item.name}</Link></td>
+                    <td>{item.email}</td>
+                    <td>
+                      <button className="btn btn-danger btn-sm m-1">Törlés</button>
+                      <button className="btn btn-primary btn-sm m-1">Módosítás</button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" className="text-center">
+                    Betöltés...
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
 
-                                <td>{item.id}</td>
-                                <td><Link to={'/users' + item.id}>{item.name}</Link></td>
-                                <td>{item.emial}</td>
-                                <td>
-                                    <a href="" className='btn btn-danger btn-sm m-1'>Törlés</a>
-                                    <a href="" className='btn btn-primary btn-sm m-1'>Módosítás</a>
-                                </td>
-
-                            </tr> ) : <tr>
-                                <td>
-                                    <h4>Loading...</h4>
-                                </td>
-
-                            </tr>}
-                            </tbody>
-                            </table>
-
-                            <p className='text-center'>
-                                {links !== null && links.map( (link, index) =>{
-                                    return <a href={link.url} onClick={ function(e){
-                                        e.preventDefault()
-                                        setUrl(link.url)
-                                    }} className='btn btn-outline-primary' dangerouslySetInnerHTML={{__html: link.label}}/>
-                                })}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 }
 
 export default Users;
-
-// if (document.getElementById('user')) {
-//     ReactDOM.render(<Users />, document.getElementById('user'));
-// }
