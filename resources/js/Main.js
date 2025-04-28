@@ -9,7 +9,7 @@ const Main = () => {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Users />} />
-                <Route path="/users/:id" element={<UserEdit />} />
+                <Route path="/users/:id/edit" element={<UserEdit />} />
 
 
                 <Route path="*" element={<h3>404 not found</h3>} />

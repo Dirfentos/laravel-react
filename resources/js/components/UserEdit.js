@@ -42,7 +42,7 @@ const UserEdit = () => {
         <>
         {user === null ? 'loading' : <form className='row col-md-6 col-lg-4 mx-auto my-5 g-3' onSubmit={handleSubmit}>
 
-            <h3 className='text-center col-12'>Xy Adatai</h3>
+            <h3 className='text-center col-12'>{user.name} Adatai</h3>
 
             <div className="col-12">
                 <input type="text" name='name' className="form-control" placeholder='Név' value={user.name} onChange={handleChange}/>
