@@ -10,8 +10,6 @@ const Main = () => {
             <Routes>
                 <Route path="/" element={<Users />} />
                 <Route path="/users/:id/edit" element={<UserEdit />} />
-
-
                 <Route path="*" element={<h3>404 not found</h3>} />
             </Routes>
         </BrowserRouter>
